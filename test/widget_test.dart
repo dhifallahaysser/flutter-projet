@@ -9,41 +9,39 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
 
-    expect(find.text('Bienvenue sur G-STORE'), findsOneWidget);
+    expect(find.text('Sign In'), findsOneWidget);
 
-    await tester.tap(find.text('Se connecter'));
+    await tester.tap(find.text('SIGN IN'));
     await tester.pump();
 
-    expect(find.text('Veuillez saisir votre adresse e-mail.'), findsOneWidget);
-    expect(find.text('Veuillez saisir votre mot de passe.'), findsOneWidget);
+    expect(find.text('Required field'), findsNWidgets(2));
 
-    await tester.enterText(
-      find.widgetWithText(TextFormField, 'Adresse e-mail'),
-      'test@gstore.com',
-    );
-    await tester.enterText(
-      find.widgetWithText(TextFormField, 'Mot de passe'),
-      'password',
-    );
-    await tester.tap(find.text('Se connecter'));
+    await tester.enterText(find.byType(TextFormField).at(0), 'test@gstore.com');
+    await tester.enterText(find.byType(TextFormField).at(1), 'password');
+    await tester.tap(find.text('SIGN IN'));
     await tester.pumpAndSettle();
 
     expect(find.text('G-STORE'), findsOneWidget);
     expect(find.text('House Of Dead'), findsOneWidget);
   });
 
+  testWidgets('create account opens sign up form', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('CREATE AN ACCOUNT'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sign Up'), findsOneWidget);
+    expect(find.byType(TextFormField), findsNWidgets(3));
+    expect(find.text('Already have an account ?'), findsOneWidget);
+  });
+
   testWidgets('tap on film opens detail screen', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
-    await tester.enterText(
-      find.widgetWithText(TextFormField, 'Adresse e-mail'),
-      'test@gstore.com',
-    );
-    await tester.enterText(
-      find.widgetWithText(TextFormField, 'Mot de passe'),
-      'password',
-    );
-    await tester.tap(find.text('Se connecter'));
+    await tester.enterText(find.byType(TextFormField).at(0), 'test@gstore.com');
+    await tester.enterText(find.byType(TextFormField).at(1), 'password');
+    await tester.tap(find.text('SIGN IN'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Ice Road'));
